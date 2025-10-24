@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Bills</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Daily Transactions</h1>
+
+    <div class="buttons">
+      <button onclick="showAddSaleForm()">Add Daily Sale</button>
+      <button onclick="showAddExpenseForm()">Add Daily Expense</button>
+    </div>
+
+    <!-- Add Sale Form -->
+    <div id="addSaleForm" class="form-section" style="display:none;">
+      <h2>Add Sale</h2>
+      <input type="number" id="saleAmount" placeholder="Sale Amount">
+      <input type="date" id="saleDate">
+      <textarea id="saleNotes" placeholder="Notes (optional)"></textarea>
+      <button onclick="addSale()">Submit</button>
+    </div>
+
+    <!-- Add Expense Form -->
+    <div id="addExpenseForm" class="form-section" style="display:none;">
+      <h2>Add Expense</h2>
+      <input type="number" id="expenseAmount" placeholder="Expense Amount">
+      <input type="date" id="expenseDate">
+      <textarea id="expenseNotes" placeholder="Notes (optional)"></textarea>
+      <button onclick="addExpense()">Submit</button>
+    </div>
+
+    <!-- Summary Section -->
+    <div class="summary">
+      <h2>Daily Summary</h2>
+      <p>Total Sale: <span id="totalSale">0</span></p>
+      <p>Total Expense: <span id="totalExpense">0</span></p>
+      <p>Daily Profit: <span id="dailyProfit">0</span></p>
+    </div>
+
+    <a href="index.html" class="btn">Back to Home</a>
+  </div>
+</body>
+</html>
