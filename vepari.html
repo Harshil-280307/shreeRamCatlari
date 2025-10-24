@@ -26,6 +26,24 @@
       <p>Total Paid: <span id="totalPaid">0</span></p>
       <p>Total This Month: <span id="totalMonth">0</span></p>
     </div>
+
+    <!-- All Bills List Section -->
+    <div class="bills-list-section">
+      <h3>All Vepari Bills</h3>
+      
+      <!-- Filter Buttons -->
+      <div class="filter-buttons">
+        <button class="filter-btn active" onclick="filterBills('all')">All Bills</button>
+        <button class="filter-btn" onclick="filterBills('paid')">Paid</button>
+        <button class="filter-btn" onclick="filterBills('unpaid')">Unpaid</button>
+      </div>
+
+      <!-- Bills List Container -->
+      <div id="allBillsList">
+        <!-- Bills will be dynamically loaded here -->
+        <div class="empty-state">No bills to display</div>
+      </div>
+    </div>
     
     <a href="index.html" class="btn back-btn">Back to Home</a>
   </div>
@@ -36,13 +54,14 @@
       <button class="modal-close" onclick="closeModal('addBillModal')">×</button>
       <div id="addBillForm" class="form-section" style="display:block;">
         <h2>Add New Bill</h2>
-        <input type="text" id="billName" placeholder="Bill Name">
-        <input type="number" id="billAmount" placeholder="Amount">
+        <input type="text" id="billName" placeholder="Bill Name" required>
+        <input type="number" id="billAmount" placeholder="Total Amount" required>
+        <input type="number" id="billPaidAmount" placeholder="Paid Amount (optional)" value="0">
         <select id="billStatus">
           <option value="unpaid">Unpaid</option>
           <option value="paid">Paid</option>
         </select>
-        <input type="date" id="billDate">
+        <input type="date" id="billDate" required>
         <textarea id="billNotes" placeholder="Notes (optional)"></textarea>
         <button onclick="addBillAndClose()">Submit</button>
       </div>
@@ -83,6 +102,50 @@
     function addBillAndClose() {
       addBill(); // Your existing function from app.js
       closeModal('addBillModal');
+      loadAllBills(); // Refresh the bills list
+    }
+
+    // Filter bills by status
+    let currentFilter = 'all';
+    function filterBills(status) {
+      currentFilter = status;
+      
+      // Update active button
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      filterBtns.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      // Call your existing function to reload bills with filter
+      loadAllBills();
+    }
+
+    // Function to load and display all bills
+    // You need to implement this in your app.js
+    function loadAllBills() {
+      // This should fetch bills from Firebase and display them
+      // Example structure for each bill:
+      const billsContainer = document.getElementById('allBillsList');
+      
+      // Your code to fetch bills from Firebase
+      // Then create bill cards like this:
+      /*
+      const billCard = `
+        <div class="bill-item ${bill.status}">
+          <div class="bill-header">
+            <div class="bill-name">${bill.name}</div>
+            <div class="bill-amount">₹${bill.amount}</div>
+          </div>
+          <div class="bill-status ${bill.status}">${bill.status}</div>
+          <div class="bill-date">Date: ${bill.date}</div>
+          <div class="bill-notes">${bill.notes || ''}</div>
+          <div>Paid: ₹${bill.paidAmount || 0} | Unpaid: ₹${bill.amount - (bill.paidAmount || 0)}</div>
+          <div class="bill-actions">
+            <button onclick="editBill('${bill.id}')">Edit</button>
+            <button onclick="deleteBill('${bill.id}')">Delete</button>
+          </div>
+        </div>
+      `;
+      */
     }
 
     // Close modal with Escape key
@@ -91,6 +154,11 @@
         closeModal('addBillModal');
         closeModal('updateBillModal');
       }
+    });
+
+    // Load bills when page loads
+    window.addEventListener('load', function() {
+      loadAllBills();
     });
   </script>
 </body>
