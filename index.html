@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Harshil Stores Bill Manager</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Harshil Stores Bill Manager</h1>
+    
+    <div class="buttons">
+      <a href="vepari.html" class="btn">Vepari Bills</a>
+      <a href="daily.html" class="btn">Daily Bills</a>
+    </div>
+
+    <div class="summary">
+      <h2>Dashboard Summary</h2>
+      <p>Daily Avg Income: <span id="dailyAvg">0</span></p>
+      <p>Monthly Income: <span id="monthlyIncome">0</span></p>
+      <p>Yearly Income: <span id="yearlyIncome">0</span></p>
+      <p>Daily Expenses: <span id="dailyExpense">0</span></p>
+      <p>Daily Profit: <span id="dailyProfit">0</span></p>
+    </div>
+  </div>
+</body>
+</html>
