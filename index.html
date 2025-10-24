@@ -11,21 +11,27 @@
   <script src="app.js" defer></script>
 </head>
 <body>
-  <div class="container">
+ <!-- This is a demo showing all three pages in one file -->
+  <!-- In your actual implementation, keep them as separate files -->
+  
+  <!-- ============================================
+       INDEX.HTML CONTENT
+  ============================================ -->
+  <div class="container" id="homePage">
     <h1>Harshil Stores Bill Manager</h1>
     
     <div class="buttons">
       <a href="vepari.html" class="btn">Vepari Bills</a>
       <a href="daily.html" class="btn">Daily Bills</a>
     </div>
-
+    
     <div class="summary">
       <h2>Dashboard Summary</h2>
-      <p>Daily Avg Income: <span id="dailyAvg">0</span></p>
-      <p>Monthly Income: <span id="monthlyIncome">0</span></p>
-      <p>Yearly Income: <span id="yearlyIncome">0</span></p>
-      <p>Daily Expenses: <span id="dailyExpense">0</span></p>
-      <p>Daily Profit: <span id="dailyProfit">0</span></p>
+      <p>Daily Avg Income: <span id="dailyAvg">₹0</span></p>
+      <p>Monthly Income: <span id="monthlyIncome">₹0</span></p>
+      <p>Yearly Income: <span id="yearlyIncome">₹0</span></p>
+      <p>Daily Expenses: <span id="dailyExpense">₹0</span></p>
+      <p>Daily Profit: <span id="dailyProfit">₹0</span></p>
     </div>
   </div>
 </body>
