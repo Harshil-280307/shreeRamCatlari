@@ -11,42 +11,58 @@
   <script src="app.js" defer></script>
 </head>
 <body>
-  <div class="container">
+  <!-- ============================================
+       VEPARI.HTML CONTENT (HIDDEN - FOR DEMO)
+  ============================================ -->
+  <div class="container" id="vepariPage" style="display:none;">
     <h1>Vepari Bills</h1>
-
+    
     <div class="buttons">
-      <button onclick="showAddBillForm()">Add Bill</button>
-      <button onclick="showUpdateBillForm()">Update/Delete Bill</button>
+      <button onclick="openModal('addBillModal')">Add Bill</button>
+      <button onclick="openModal('updateBillModal')">Update/Delete Bill</button>
     </div>
-
-    <!-- Add Bill Form -->
-    <div id="addBillForm" class="form-section" style="display:none;">
-      <h2>Add New Bill</h2>
-      <input type="text" id="billName" placeholder="Bill Name">
-      <input type="number" id="billAmount" placeholder="Amount">
-      <select id="billStatus">
-        <option value="unpaid">Unpaid</option>
-        <option value="paid">Paid</option>
-      </select>
-      <input type="date" id="billDate">
-      <textarea id="billNotes" placeholder="Notes (optional)"></textarea>
-      <button onclick="addBill()">Submit</button>
-    </div>
-
-    <!-- Update/Delete Bills -->
-    <div id="updateBillSection" class="form-section" style="display:none;">
-      <h2>Update/Delete Bills</h2>
-      <input type="text" id="searchBillName" placeholder="Search by Bill Name" oninput="searchBills()">
-      <div id="billList"></div>
-    </div>
-
+    
     <!-- Summary Section -->
     <div class="summary">
       <h2>Monthly Summary</h2>
-      <p>Total Pending: <span id="totalPending">0</span></p>
-      <p>Total Paid: <span id="totalPaid">0</span></p>
-      <p>Total This Month: <span id="totalMonth">0</span></p>
+      <p>Total Pending: <span id="totalPending">₹0</span></p>
+      <p>Total Paid: <span id="totalPaid">₹0</span></p>
+      <p>Total This Month: <span id="totalMonth">₹0</span></p>
     </div>
+    
+    <a href="index.html" class="btn back-btn">Back to Home</a>
+  </div>
+
+  <!-- Add Bill Modal -->
+  <div id="addBillModal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'addBillModal')">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal('addBillModal')">×</button>
+      <div id="addBillForm" class="form-section" style="display:block;">
+        <h2>Add New Bill</h2>
+        <input type="text" id="billName" placeholder="Bill Name">
+        <input type="number" id="billAmount" placeholder="Amount">
+        <select id="billStatus">
+          <option value="unpaid">Unpaid</option>
+          <option value="paid">Paid</option>
+        </select>
+        <input type="date" id="billDate">
+        <textarea id="billNotes" placeholder="Notes (optional)"></textarea>
+        <button onclick="addBillAndClose()">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Update/Delete Bill Modal -->
+  <div id="updateBillModal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'updateBillModal')">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal('updateBillModal')">×</button>
+      <div id="updateBillSection" class="form-section" style="display:block;">
+        <h2>Update/Delete Bills</h2>
+        <input type="text" id="searchBillName" placeholder="Search by Bill Name" oninput="searchBills()">
+        <div id="billList"></div>
+      </div>
+    </div>
+  </div>
 
     <a href="index.html" class="btn">Back to Home</a>
   </div>
