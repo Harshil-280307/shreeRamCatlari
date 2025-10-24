@@ -1,422 +1,346 @@
-/* body {
-  font-family: Arial, sans-serif;
-  background: #f0f4f7;
+/* ============================================
+   GLOBAL STYLES & RESET
+============================================ */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
-.container {
-  max-width: 500px;
-  margin: auto;
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
   padding: 20px;
+  color: #333;
+}
+
+/* ============================================
+   CONTAINER & LAYOUT
+============================================ */
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+/* ============================================
+   TYPOGRAPHY
+============================================ */
+h1 {
+  color: #667eea;
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  color: #764ba2;
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
   text-align: center;
 }
 
-h1 {
-  color: #1a73e8;
-}
-
+/* ============================================
+   BUTTONS
+============================================ */
 .buttons {
-  margin: 30px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
 }
 
-.btn {
+.btn, button {
   display: block;
-  margin: 10px auto;
-  padding: 15px 30px;
+  width: 100%;
+  padding: 16px 30px;
   text-decoration: none;
-  background: #1a73e8;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  border-radius: 10px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  text-align: center;
+}
+
+.btn:hover, button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.btn:active, button:active {
+  transform: translateY(0);
+}
+
+/* ============================================
+   SUMMARY CARDS
+============================================ */
+.summary {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.summary p {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #e8e8e8;
+  font-size: 16px;
+  color: #555;
+}
+
+.summary p:last-child {
+  border-bottom: none;
+}
+
+.summary span {
+  font-weight: 700;
+  color: #667eea;
   font-size: 18px;
 }
 
-.summary {
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+/* ============================================
+   MODAL OVERLAY & POPUP
+============================================ */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
 }
 
-.summary h2 {
+.modal-overlay.active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #f0f0f0;
+  border: none;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  color: #666;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+  padding: 0;
+}
+
+.modal-close:hover {
+  background: #e0e0e0;
+  color: #333;
+  transform: rotate(90deg);
+}
+
+/* ============================================
+   FORM STYLING
+============================================ */
+.form-section {
+  display: none;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+  width: 100%;
+  padding: 14px 18px;
   margin-bottom: 15px;
-} */
+  border: 2px solid #e8e8e8;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background: #f8f9ff;
+  color: #333;
+}
 
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
 
+textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+}
 
+select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23667eea' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  padding-right: 40px;
+}
 
+/* ============================================
+   BILL LIST STYLING
+============================================ */
+#billList {
+  margin-top: 20px;
+}
 
+.bill-item {
+  background: #f8f9ff;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  border-left: 4px solid #667eea;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
 
+.bill-item p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #555;
+}
 
+.bill-item button {
+  margin-top: 10px;
+  margin-right: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  width: auto;
+  display: inline-block;
+}
 
+/* ============================================
+   BACK BUTTON SPECIAL STYLING
+============================================ */
+a.btn.back-btn {
+  background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+  box-shadow: 0 4px 15px rgba(108, 117, 125, 0.4);
+  margin-top: 20px;
+}
 
+a.btn.back-btn:hover {
+  box-shadow: 0 6px 20px rgba(108, 117, 125, 0.6);
+}
 
+/* ============================================
+   RESPONSIVE DESIGN
+============================================ */
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
 
+  h1 {
+    font-size: 24px;
+  }
 
+  h2 {
+    font-size: 20px;
+  }
 
+  .btn, button {
+    padding: 14px 24px;
+    font-size: 15px;
+  }
 
+  .modal-content {
+    padding: 25px 20px;
+  }
 
+  .summary p {
+    font-size: 14px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
 
+  .summary span {
+    font-size: 16px;
+  }
+}
 
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
 
- /* ============================================
-       GLOBAL STYLES & RESET
-    ============================================ */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  .container {
+    padding: 15px;
+    border-radius: 15px;
+  }
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-      padding: 20px;
-      color: #333;
-    }
+  h1 {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
 
-    /* ============================================
-       CONTAINER & LAYOUT
-    ============================================ */
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      background: rgba(255, 255, 255, 0.95);
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(10px);
-    }
-
-    /* ============================================
-       TYPOGRAPHY
-    ============================================ */
-    h1 {
-      color: #667eea;
-      font-size: 28px;
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 30px;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    h2 {
-      color: #764ba2;
-      font-size: 22px;
-      font-weight: 600;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    /* ============================================
-       BUTTONS
-    ============================================ */
-    .buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      margin-bottom: 30px;
-    }
-
-    .btn, button {
-      display: block;
-      width: 100%;
-      padding: 16px 30px;
-      text-decoration: none;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-      text-align: center;
-    }
-
-    .btn:hover, button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-    }
-
-    .btn:active, button:active {
-      transform: translateY(0);
-    }
-
-    /* ============================================
-       SUMMARY CARDS
-    ============================================ */
-    .summary {
-      background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
-      padding: 25px;
-      border-radius: 16px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
-    }
-
-    .summary p {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid #e8e8e8;
-      font-size: 16px;
-      color: #555;
-    }
-
-    .summary p:last-child {
-      border-bottom: none;
-    }
-
-    .summary span {
-      font-weight: 700;
-      color: #667eea;
-      font-size: 18px;
-    }
-
-    /* ============================================
-       MODAL OVERLAY & POPUP
-    ============================================ */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(4px);
-      z-index: 1000;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .modal-overlay.active {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
-
-    @keyframes slideUp {
-      from {
-        transform: translateY(50px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    .modal-content {
-      background: white;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-      max-width: 500px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      animation: slideUp 0.3s ease;
-      position: relative;
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      background: #f0f0f0;
-      border: none;
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 20px;
-      color: #666;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: none;
-      padding: 0;
-    }
-
-    .modal-close:hover {
-      background: #e0e0e0;
-      color: #333;
-      transform: rotate(90deg);
-    }
-
-    /* ============================================
-       FORM STYLING
-    ============================================ */
-    .form-section {
-      display: none;
-    }
-
-    input[type="text"],
-    input[type="number"],
-    input[type="date"],
-    select,
-    textarea {
-      width: 100%;
-      padding: 14px 18px;
-      margin-bottom: 15px;
-      border: 2px solid #e8e8e8;
-      border-radius: 10px;
-      font-size: 15px;
-      transition: all 0.3s ease;
-      background: #f8f9ff;
-      color: #333;
-    }
-
-    input:focus,
-    select:focus,
-    textarea:focus {
-      outline: none;
-      border-color: #667eea;
-      background: white;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-      font-family: inherit;
-    }
-
-    select {
-      cursor: pointer;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23667eea' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 15px center;
-      padding-right: 40px;
-    }
-
-    /* ============================================
-       BILL LIST STYLING
-    ============================================ */
-    #billList {
-      margin-top: 20px;
-    }
-
-    .bill-item {
-      background: #f8f9ff;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 12px;
-      border-left: 4px solid #667eea;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    }
-
-    .bill-item p {
-      margin: 5px 0;
-      font-size: 14px;
-      color: #555;
-    }
-
-    .bill-item button {
-      margin-top: 10px;
-      margin-right: 8px;
-      padding: 8px 16px;
-      font-size: 14px;
-      width: auto;
-      display: inline-block;
-    }
-
-    /* ============================================
-       RESPONSIVE DESIGN
-    ============================================ */
-    @media (max-width: 768px) {
-      .container {
-        padding: 20px;
-      }
-
-      h1 {
-        font-size: 24px;
-      }
-
-      h2 {
-        font-size: 20px;
-      }
-
-      .btn, button {
-        padding: 14px 24px;
-        font-size: 15px;
-      }
-
-      .modal-content {
-        padding: 25px 20px;
-      }
-
-      .summary p {
-        font-size: 14px;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-      }
-
-      .summary span {
-        font-size: 16px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      body {
-        padding: 10px;
-      }
-
-      .container {
-        padding: 15px;
-        border-radius: 15px;
-      }
-
-      h1 {
-        font-size: 22px;
-        margin-bottom: 20px;
-      }
-
-      .modal-content {
-        padding: 20px 15px;
-      }
-    }
-
-    /* ============================================
-       UTILITY CLASSES
-    ============================================ */
-    .text-center {
-      text-align: center;
-    }
-
-    .mt-20 {
-      margin-top: 20px;
-    }
-
-    .mb-20 {
-      margin-bottom: 20px;
-    }
-
-    /* ============================================
-       BACK BUTTON SPECIAL STYLING
-    ============================================ */
-    a.btn.back-btn {
-      background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
-      box-shadow: 0 4px 15px rgba(108, 117, 125, 0.4);
-      margin-top: 20px;
-    }
-
-    a.btn.back-btn:hover {
-      box-shadow: 0 6px 20px rgba(108, 117, 125, 0.6);
-    }
+  .modal-content {
+    padding: 20px 15px;
+  }
+}
