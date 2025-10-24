@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern Billing System - Harshil Stores</title>
+  <style>
+    /* ============================================
+       GLOBAL STYLES & RESET
+    ============================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+
+    /* ============================================
+       CONTAINER & LAYOUT
+    ============================================ */
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+    }
+
+    /* ============================================
+       TYPOGRAPHY
+    ============================================ */
+    h1 {
+      color: #667eea;
+      font-size: 28px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #764ba2;
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    /* ============================================
+       BUTTONS
+    ============================================ */
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .btn, button {
+      display: block;
+      width: 100%;
+      padding: 16px 30px;
+      text-decoration: none;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      text-align: center;
+    }
+
+    .btn:hover, button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .btn:active, button:active {
+      transform: translateY(0);
+    }
+
+    /* ============================================
+       SUMMARY CARDS
+    ============================================ */
+    .summary {
+      background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .summary p {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #e8e8e8;
+      font-size: 16px;
+      color: #555;
+    }
+
+    .summary p:last-child {
+      border-bottom: none;
+    }
+
+    .summary span {
+      font-weight: 700;
+      color: #667eea;
+      font-size: 18px;
+    }
+
+    /* ============================================
+       MODAL OVERLAY & POPUP
+    ============================================ */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 500px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideUp 0.3s ease;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: #f0f0f0;
+      border: none;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+      color: #666;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: none;
+      padding: 0;
+    }
+
+    .modal-close:hover {
+      background: #e0e0e0;
+      color: #333;
+      transform: rotate(90deg);
+    }
+
+    /* ============================================
+       FORM STYLING
+    ============================================ */
+    .form-section {
+      display: none;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 14px 18px;
+      margin-bottom: 15px;
+      border: 2px solid #e8e8e8;
+      border-radius: 10px;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      background: #f8f9ff;
+      color: #333;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+      font-family: inherit;
+    }
+
+    select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23667eea' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 15px center;
+      padding-right: 40px;
+    }
+
+    /* ============================================
+       BILL LIST STYLING
+    ============================================ */
+    #billList {
+      margin-top: 20px;
+    }
+
+    .bill-item {
+      background: #f8f9ff;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      border-left: 4px solid #667eea;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .bill-item p {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .bill-item button {
+      margin-top: 10px;
+      margin-right: 8px;
+      padding: 8px 16px;
+      font-size: 14px;
+      width: auto;
+      display: inline-block;
+    }
+
+    /* ============================================
+       RESPONSIVE DESIGN
+    ============================================ */
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+
+      .btn, button {
+        padding: 14px 24px;
+        font-size: 15px;
+      }
+
+      .modal-content {
+        padding: 25px 20px;
+      }
+
+      .summary p {
+        font-size: 14px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+      }
+
+      .summary span {
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+
+      .container {
+        padding: 15px;
+        border-radius: 15px;
+      }
+
+      h1 {
+        font-size: 22px;
+        margin-bottom: 20px;
+      }
+
+      .modal-content {
+        padding: 20px 15px;
+      }
+    }
+
+    /* ============================================
+       UTILITY CLASSES
+    ============================================ */
+    .text-center {
+      text-align: center;
+    }
+
+    .mt-20 {
+      margin-top: 20px;
+    }
+
+    .mb-20 {
+      margin-bottom: 20px;
+    }
+
+    /* ============================================
+       BACK BUTTON SPECIAL STYLING
+    ============================================ */
+    a.btn.back-btn {
+      background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+      box-shadow: 0 4px 15px rgba(108, 117, 125, 0.4);
+      margin-top: 20px;
+    }
+
+    a.btn.back-btn:hover {
+      box-shadow: 0 6px 20px rgba(108, 117, 125, 0.6);
+    }
+  </style>
+</head>
+<body>
+  <!-- This is a demo showing all three pages in one file -->
+  <!-- In your actual implementation, keep them as separate files -->
+  
+  <!-- ============================================
+       INDEX.HTML CONTENT
+  ============================================ -->
+  <div class="container" id="homePage">
+    <h1>Harshil Stores Bill Manager</h1>
+    
+    <div class="buttons">
+      <a href="vepari.html" class="btn">Vepari Bills</a>
+      <a href="daily.html" class="btn">Daily Bills</a>
+    </div>
+    
+    <div class="summary">
+      <h2>Dashboard Summary</h2>
+      <p>Daily Avg Income: <span id="dailyAvg">₹0</span></p>
+      <p>Monthly Income: <span id="monthlyIncome">₹0</span></p>
+      <p>Yearly Income: <span id="yearlyIncome">₹0</span></p>
+      <p>Daily Expenses: <span id="dailyExpense">₹0</span></p>
+      <p>Daily Profit: <span id="dailyProfit">₹0</span></p>
+    </div>
+  </div>
+
+  <!-- ============================================
+       VEPARI.HTML CONTENT (HIDDEN - FOR DEMO)
+  ============================================ -->
+  <div class="container" id="vepariPage" style="display:none;">
+    <h1>Vepari Bills</h1>
+    
+    <div class="buttons">
+      <button onclick="openModal('addBillModal')">Add Bill</button>
+      <button onclick="openModal('updateBillModal')">Update/Delete Bill</button>
+    </div>
+    
+    <!-- Summary Section -->
+    <div class="summary">
+      <h2>Monthly Summary</h2>
+      <p>Total Pending: <span id="totalPending">₹0</span></p>
+      <p>Total Paid: <span id="totalPaid">₹0</span></p>
+      <p>Total This Month: <span id="totalMonth">₹0</span></p>
+    </div>
+    
+    <a href="index.html" class="btn back-btn">Back to Home</a>
+  </div>
+
+  <!-- Add Bill Modal -->
+  <div id="addBillModal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'addBillModal')">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal('addBillModal')">×</button>
+      <div id="addBillForm" class="form-section" style="display:block;">
+        <h2>Add New Bill</h2>
+        <input type="text" id="billName" placeholder="Bill Name">
+        <input type="number" id="billAmount" placeholder="Amount">
+        <select id="billStatus">
+          <option value="unpaid">Unpaid</option>
+          <option value="paid">Paid</option>
+        </select>
+        <input type="date" id="billDate">
+        <textarea id="billNotes" placeholder="Notes (optional)"></textarea>
+        <button onclick="addBillAndClose()">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Update/Delete Bill Modal -->
+  <div id="updateBillModal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'updateBillModal')">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal('updateBillModal')">×</button>
+      <div id="updateBillSection" class="form-section" style="display:block;">
+        <h2>Update/Delete Bills</h2>
+        <input type="text" id="searchBillName" placeholder="Search by Bill Name" oninput="searchBills()">
+        <div id="billList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       DAILY.HTML CONTENT (HIDDEN - FOR DEMO)
+  ============================================ -->
+  <div class="container" id="dailyPage" style="display:none;">
+    <h1>Daily Transactions</h1>
+    
+    <div class="buttons">
+      <button onclick="openModal('addSaleModal')">Add Daily Sale</button>
+      <button onclick="openModal('addExpenseModal')">Add Daily Expense</button>
+    </div>
+    
+    <!-- Summary Section -->
+    <div class="summary">
+      <h2>Daily Summary</h2>
+      <p>Total Sale: <span id="totalSale">₹0</span></p>
+      <p>Total Expense: <span id="totalExpense">₹0</span></p>
+      <p>Daily Profit: <span id="dailyProfit">₹0</span></p>
+    </div>
+    
+    <a href="index.html" class="btn back-btn">Back to Home</a>
+  </div>
+
+  <!-- Add Sale Modal -->
+  <div id="addSaleModal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'addSaleModal')">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal('addSaleModal')">×</button>
+      <div id="addSaleForm" class="form-section" style="display:block;">
+        <h2>Add Sale</h2>
+        <input type="number" id="saleAmount" placeholder="Sale Amount">
+        <input type="date" id="saleDate">
+        <textarea id="saleNotes" placeholder="Notes (optional)"></textarea>
+        <button onclick="addSaleAndClose()">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Expense Modal -->
+  <div id="addExpenseModal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'addExpenseModal')">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal('addExpenseModal')">×</button>
+      <div id="addExpenseForm" class="form-section" style="display:block;">
+        <h2>Add Expense</h2>
+        <input type="number" id="expenseAmount" placeholder="Expense Amount">
+        <input type="date" id="expenseDate">
+        <textarea id="expenseNotes" placeholder="Notes (optional)"></textarea>
+        <button onclick="addExpenseAndClose()">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Modal control functions
+    function openModal(modalId) {
+      document.getElementById(modalId).classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    function closeModalOnOverlay(event, modalId) {
+      if (event.target.classList.contains('modal-overlay')) {
+        closeModal(modalId);
+      }
+    }
+
+    // Wrapper functions that close modals after submission
+    function addBillAndClose() {
+      addBill(); // Your existing function
+      closeModal('addBillModal');
+    }
+
+    function addSaleAndClose() {
+      addSale(); // Your existing function
+      closeModal('addSaleModal');
+    }
+
+    function addExpenseAndClose() {
+      addExpense(); // Your existing function
+      closeModal('addExpenseModal');
+    }
+
+    // Your existing functions (placeholders for demo)
+    function addBill() {
+      console.log('Bill added');
+      // Your existing addBill logic
+    }
+
+    function addSale() {
+      console.log('Sale added');
+      // Your existing addSale logic
+    }
+
+    function addExpense() {
+      console.log('Expense added');
+      // Your existing addExpense logic
+    }
+
+    function searchBills() {
+      console.log('Searching bills');
+      // Your existing searchBills logic
+    }
+
+    // Demo: Toggle pages (remove this in actual implementation)
+    document.addEventListener('DOMContentLoaded', function() {
+      const btns = document.querySelectorAll('.btn');
+      btns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          if (this.textContent.includes('Vepari')) {
+            e.preventDefault();
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('vepariPage').style.display = 'block';
+            document.getElementById('dailyPage').style.display = 'none';
+          } else if (this.textContent.includes('Daily')) {
+            e.preventDefault();
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('vepariPage').style.display = 'none';
+            document.getElementById('dailyPage').style.display = 'block';
+          } else if (this.textContent.includes('Back')) {
+            e.preventDefault();
+            document.getElementById('homePage').style.display = 'block';
+            document.getElementById('vepariPage').style.display = 'none';
+            document.getElementById('dailyPage').style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
