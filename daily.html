@@ -11,40 +11,52 @@
   <script src="app.js" defer></script>
 </head>
 <body>
-  <div class="container">
+  <div class="container" id="dailyPage" style="display:none;">
     <h1>Daily Transactions</h1>
-
+    
     <div class="buttons">
-      <button onclick="showAddSaleForm()">Add Daily Sale</button>
-      <button onclick="showAddExpenseForm()">Add Daily Expense</button>
+      <button onclick="openModal('addSaleModal')">Add Daily Sale</button>
+      <button onclick="openModal('addExpenseModal')">Add Daily Expense</button>
     </div>
-
-    <!-- Add Sale Form -->
-    <div id="addSaleForm" class="form-section" style="display:none;">
-      <h2>Add Sale</h2>
-      <input type="number" id="saleAmount" placeholder="Sale Amount">
-      <input type="date" id="saleDate">
-      <textarea id="saleNotes" placeholder="Notes (optional)"></textarea>
-      <button onclick="addSale()">Submit</button>
-    </div>
-
-    <!-- Add Expense Form -->
-    <div id="addExpenseForm" class="form-section" style="display:none;">
-      <h2>Add Expense</h2>
-      <input type="number" id="expenseAmount" placeholder="Expense Amount">
-      <input type="date" id="expenseDate">
-      <textarea id="expenseNotes" placeholder="Notes (optional)"></textarea>
-      <button onclick="addExpense()">Submit</button>
-    </div>
-
+    
     <!-- Summary Section -->
     <div class="summary">
       <h2>Daily Summary</h2>
-      <p>Total Sale: <span id="totalSale">0</span></p>
-      <p>Total Expense: <span id="totalExpense">0</span></p>
-      <p>Daily Profit: <span id="dailyProfit">0</span></p>
+      <p>Total Sale: <span id="totalSale">₹0</span></p>
+      <p>Total Expense: <span id="totalExpense">₹0</span></p>
+      <p>Daily Profit: <span id="dailyProfit">₹0</span></p>
     </div>
+    
+    <a href="index.html" class="btn back-btn">Back to Home</a>
+  </div>
 
+  <!-- Add Sale Modal -->
+  <div id="addSaleModal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'addSaleModal')">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal('addSaleModal')">×</button>
+      <div id="addSaleForm" class="form-section" style="display:block;">
+        <h2>Add Sale</h2>
+        <input type="number" id="saleAmount" placeholder="Sale Amount">
+        <input type="date" id="saleDate">
+        <textarea id="saleNotes" placeholder="Notes (optional)"></textarea>
+        <button onclick="addSaleAndClose()">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Expense Modal -->
+  <div id="addExpenseModal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'addExpenseModal')">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal('addExpenseModal')">×</button>
+      <div id="addExpenseForm" class="form-section" style="display:block;">
+        <h2>Add Expense</h2>
+        <input type="number" id="expenseAmount" placeholder="Expense Amount">
+        <input type="date" id="expenseDate">
+        <textarea id="expenseNotes" placeholder="Notes (optional)"></textarea>
+        <button onclick="addExpenseAndClose()">Submit</button>
+      </div>
+    </div>
+  </div>
     <a href="index.html" class="btn">Back to Home</a>
   </div>
 </body>
