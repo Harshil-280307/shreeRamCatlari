@@ -8,11 +8,10 @@
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-  <script src="row.js"></script>
   <script src="app.js" defer></script>
 </head>
 <body>
-  <div class="container" id="dailyPage" style="display:none;">
+  <div class="container">
     <h1>Daily Transactions</h1>
     
     <div class="buttons">
@@ -23,9 +22,9 @@
     <!-- Summary Section -->
     <div class="summary">
       <h2>Daily Summary</h2>
-      <p>Total Sale: <span id="totalSale">₹0</span></p>
-      <p>Total Expense: <span id="totalExpense">₹0</span></p>
-      <p>Daily Profit: <span id="dailyProfit">₹0</span></p>
+      <p>Total Sale: <span id="totalSale">0</span></p>
+      <p>Total Expense: <span id="totalExpense">0</span></p>
+      <p>Daily Profit: <span id="dailyProfit">0</span></p>
     </div>
     
     <a href="index.html" class="btn back-btn">Back to Home</a>
@@ -58,7 +57,43 @@
       </div>
     </div>
   </div>
-    <a href="index.html" class="btn">Back to Home</a>
-  </div>
+
+  <script>
+    // Modal control functions
+    function openModal(modalId) {
+      document.getElementById(modalId).classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    function closeModalOnOverlay(event, modalId) {
+      if (event.target.classList.contains('modal-overlay')) {
+        closeModal(modalId);
+      }
+    }
+
+    // Wrapper functions that close modals after submission
+    function addSaleAndClose() {
+      addSale(); // Your existing function from app.js
+      closeModal('addSaleModal');
+    }
+
+    function addExpenseAndClose() {
+      addExpense(); // Your existing function from app.js
+      closeModal('addExpenseModal');
+    }
+
+    // Close modals with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeModal('addSaleModal');
+        closeModal('addExpenseModal');
+      }
+    });
+  </script>
 </body>
 </html>
