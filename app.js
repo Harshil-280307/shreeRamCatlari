@@ -1,147 +1,148 @@
-// ===== Firebase Setup =====
-const firebaseConfig = {
-     apiKey: "AIzaSyAwyTjuQkb8pwv4LLbO5clouuP9Yj8Cgik",
-    authDomain: "harshilshopapp.firebaseapp.com",
-    databaseURL: "https://harshilshopapp-default-rtdb.firebaseio.com",
-    projectId: "harshilshopapp",
-    storageBucket: "harshilshopapp.firebasestorage.app",
-    messagingSenderId: "543880904532",
-    appId: "1:543880904532:web:c60e609e113617d43f12c1",
-    measurementId: "G-NH7SC9ETC9"
-};
+// Replace with your Google Apps Script Web App URL
+const API_URL = "https://script.google.com/macros/s/AKfycbyOO4Pi4l4VxgZasYcm8fQY2KYjv67FNJOLEWiGc1AP7xkACEC78U-kpLmaj19BMbqDEA/exec";
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+// ============================
+// Vepari Bills
+// ============================
+async function addBill() {
+  const billData = {
+    name: document.getElementById("billName").value,
+    amount: document.getElementById("billAmount").value,
+    paidAmount: document.getElementById("billPaidAmount").value || 0,
+    status: document.getElementById("billStatus").value,
+    date: document.getElementById("billDate").value,
+    notes: document.getElementById("billNotes").value
+  };
 
-// ===== Helper Functions =====
-
-// --- Vepari Bills ---
-function showAddBillForm() {
-  document.getElementById('addBillForm').style.display = 'block';
-  document.getElementById('updateBillSection').style.display = 'none';
-}
-
-function showUpdateBillForm() {
-  document.getElementById('addBillForm').style.display = 'none';
-  document.getElementById('updateBillSection').style.display = 'block';
+  await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "add",
+      sheet: "VepariBills",
+      data: billData
+    }),
+  });
+  alert("Bill added successfully!");
   loadAllBills();
 }
 
-function addBill() {
-  const name = document.getElementById('billName').value;
-  const amount = document.getElementById('billAmount').value;
-  const status = document.getElementById('billStatus').value;
-  const date = document.getElementById('billDate').value;
-  const notes = document.getElementById('billNotes').value;
+async function loadAllBills() {
+  const res = await fetch(`${API_URL}?sheet=VepariBills`);
+  const bills = await res.json();
 
-  const newBillKey = db.ref('vepariBills').push().key;
-  db.ref('vepariBills/' + newBillKey).set({
-    name, amount, status, date, notes
-  }).then(() => {
-    alert('Bill Added!');
-    document.getElementById('billName').value = '';
-    document.getElementById('billAmount').value = '';
-    loadAllBills();
-    updateVepariSummary();
-  });
-}
+  const container = document.getElementById("allBillsList");
+  container.innerHTML = "";
 
-function loadAllBills() {
-  const list = document.getElementById('billList');
-  list.innerHTML = '';
-  db.ref('vepariBills').once('value', snapshot => {
-    snapshot.forEach(bill => {
-      const val = bill.val();
-      const div = document.createElement('div');
-      div.innerHTML = `
-        <strong>${val.name}</strong> - ${val.amount} - ${val.status}
-        <button onclick="deleteBill('${bill.key}')">Delete</button>
-      `;
-      list.appendChild(div);
-    });
-  });
-}
-
-function deleteBill(key) {
-  if(confirm("Delete this bill?")) {
-    db.ref('vepariBills/' + key).remove().then(() => {
-      alert('Deleted!');
-      loadAllBills();
-      updateVepariSummary();
-    });
+  if (!bills.length) {
+    container.innerHTML = `<div class='empty-state'>No bills found</div>`;
+    return;
   }
-}
 
-function updateVepariSummary() {
-  let totalPaid = 0, totalPending = 0;
-  db.ref('vepariBills').once('value', snapshot => {
-    snapshot.forEach(bill => {
-      if(bill.val().status === 'paid') totalPaid += parseFloat(bill.val().amount);
-      else totalPending += parseFloat(bill.val().amount);
-    });
-    document.getElementById('totalPaid').innerText = totalPaid.toFixed(2);
-    document.getElementById('totalPending').innerText = totalPending.toFixed(2);
-    document.getElementById('totalMonth').innerText = (totalPaid + totalPending).toFixed(2);
+  bills.forEach(bill => {
+    if (currentFilter !== "all" && bill.status !== currentFilter) return;
+
+    const unpaid = bill.amount - bill.paidAmount;
+    const div = document.createElement("div");
+    div.className = `bill-item ${bill.status}`;
+    div.innerHTML = `
+      <div class="bill-header">
+        <div class="bill-name">${bill.name}</div>
+        <div class="bill-amount">₹${bill.amount}</div>
+      </div>
+      <div class="bill-status ${bill.status}">${bill.status}</div>
+      <div class="bill-date">Date: ${bill.date}</div>
+      <div class="bill-notes">${bill.notes || ''}</div>
+      <div>Paid: ₹${bill.paidAmount || 0} | Unpaid: ₹${unpaid}</div>
+      <div class="bill-actions">
+        <button onclick="deleteBill('${bill.id}')">Delete</button>
+      </div>
+    `;
+    container.appendChild(div);
   });
 }
 
-// --- Daily Bills ---
-function showAddSaleForm() {
-  document.getElementById('addSaleForm').style.display = 'block';
-  document.getElementById('addExpenseForm').style.display = 'none';
+async function deleteBill(id) {
+  await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "delete",
+      sheet: "VepariBills",
+      id: id
+    }),
+  });
+  alert("Bill deleted!");
+  loadAllBills();
 }
 
-function showAddExpenseForm() {
-  document.getElementById('addSaleForm').style.display = 'none';
-  document.getElementById('addExpenseForm').style.display = 'block';
+// ============================
+// Daily Transactions
+// ============================
+async function addSale() {
+  const data = {
+    type: "sale",
+    amount: document.getElementById("saleAmount").value,
+    date: document.getElementById("saleDate").value,
+    notes: document.getElementById("saleNotes").value
+  };
+  await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({ action: "add", sheet: "DailyTransactions", data })
+  });
+  alert("Sale added!");
+  loadAllTransactions();
 }
 
-function addSale() {
-  const amount = document.getElementById('saleAmount').value;
-  const date = document.getElementById('saleDate').value;
-  const notes = document.getElementById('saleNotes').value;
+async function addExpense() {
+  const data = {
+    type: "expense",
+    amount: document.getElementById("expenseAmount").value,
+    date: document.getElementById("expenseDate").value,
+    notes: document.getElementById("expenseNotes").value
+  };
+  await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({ action: "add", sheet: "DailyTransactions", data })
+  });
+  alert("Expense added!");
+  loadAllTransactions();
+}
 
-  const key = db.ref('dailyBills').push().key;
-  db.ref('dailyBills/' + key).set({
-    type: 'sale',
-    amount, date, notes
-  }).then(() => {
-    alert('Sale Added!');
-    document.getElementById('saleAmount').value = '';
-    updateDailySummary();
+async function loadAllTransactions() {
+  const res = await fetch(`${API_URL}?sheet=DailyTransactions`);
+  const data = await res.json();
+
+  const salesContainer = document.getElementById("allSalesList");
+  const expensesContainer = document.getElementById("allExpensesList");
+
+  salesContainer.innerHTML = "";
+  expensesContainer.innerHTML = "";
+
+  data.forEach(item => {
+    const div = document.createElement("div");
+    div.className = `transaction-item ${item.type}`;
+    div.innerHTML = `
+      <div class="transaction-type">${item.type}</div>
+      <div class="transaction-amount">₹${item.amount}</div>
+      <div class="transaction-date">Date: ${item.date}</div>
+      <div class="transaction-notes">${item.notes || ''}</div>
+      <div class="transaction-actions">
+        <button onclick="deleteTransaction('${item.id}')">Delete</button>
+      </div>
+    `;
+    if (item.type === "sale") salesContainer.appendChild(div);
+    else expensesContainer.appendChild(div);
   });
 }
 
-function addExpense() {
-  const amount = document.getElementById('expenseAmount').value;
-  const date = document.getElementById('expenseDate').value;
-  const notes = document.getElementById('expenseNotes').value;
-
-  const key = db.ref('dailyBills').push().key;
-  db.ref('dailyBills/' + key).set({
-    type: 'expense',
-    amount, date, notes
-  }).then(() => {
-    alert('Expense Added!');
-    document.getElementById('expenseAmount').value = '';
-    updateDailySummary();
+async function deleteTransaction(id) {
+  await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "delete",
+      sheet: "DailyTransactions",
+      id
+    }),
   });
+  alert("Deleted successfully!");
+  loadAllTransactions();
 }
-
-function updateDailySummary() {
-  let totalSale = 0, totalExpense = 0;
-  db.ref('dailyBills').once('value', snapshot => {
-    snapshot.forEach(record => {
-      const val = record.val();
-      if(val.type === 'sale') totalSale += parseFloat(val.amount);
-      if(val.type === 'expense') totalExpense += parseFloat(val.amount);
-    });
-    document.getElementById('totalSale').innerText = totalSale.toFixed(2);
-    document.getElementById('totalExpense').innerText = totalExpense.toFixed(2);
-    document.getElementById('dailyProfit').innerText = (totalSale - totalExpense).toFixed(2);
-  });
-}
-
-// Initial summary load
-updateVepariSummary();
-updateDailySummary();
