@@ -26,6 +26,26 @@
       <p>Total Expense: <span id="totalExpense">0</span></p>
       <p>Daily Profit: <span id="dailyProfit">0</span></p>
     </div>
+
+    <!-- All Sales List Section -->
+    <div class="bills-list-section">
+      <h3>All Sales</h3>
+      
+      <div id="allSalesList">
+        <!-- Sales will be dynamically loaded here -->
+        <div class="empty-state">No sales to display</div>
+      </div>
+    </div>
+
+    <!-- All Expenses List Section -->
+    <div class="bills-list-section">
+      <h3>All Expenses</h3>
+      
+      <div id="allExpensesList">
+        <!-- Expenses will be dynamically loaded here -->
+        <div class="empty-state">No expenses to display</div>
+      </div>
+    </div>
     
     <a href="index.html" class="btn back-btn">Back to Home</a>
   </div>
@@ -36,8 +56,8 @@
       <button class="modal-close" onclick="closeModal('addSaleModal')">×</button>
       <div id="addSaleForm" class="form-section" style="display:block;">
         <h2>Add Sale</h2>
-        <input type="number" id="saleAmount" placeholder="Sale Amount">
-        <input type="date" id="saleDate">
+        <input type="number" id="saleAmount" placeholder="Sale Amount" required>
+        <input type="date" id="saleDate" required>
         <textarea id="saleNotes" placeholder="Notes (optional)"></textarea>
         <button onclick="addSaleAndClose()">Submit</button>
       </div>
@@ -50,8 +70,8 @@
       <button class="modal-close" onclick="closeModal('addExpenseModal')">×</button>
       <div id="addExpenseForm" class="form-section" style="display:block;">
         <h2>Add Expense</h2>
-        <input type="number" id="expenseAmount" placeholder="Expense Amount">
-        <input type="date" id="expenseDate">
+        <input type="number" id="expenseAmount" placeholder="Expense Amount" required>
+        <input type="date" id="expenseDate" required>
         <textarea id="expenseNotes" placeholder="Notes (optional)"></textarea>
         <button onclick="addExpenseAndClose()">Submit</button>
       </div>
@@ -80,11 +100,62 @@
     function addSaleAndClose() {
       addSale(); // Your existing function from app.js
       closeModal('addSaleModal');
+      loadAllTransactions(); // Refresh the transactions list
     }
 
     function addExpenseAndClose() {
       addExpense(); // Your existing function from app.js
       closeModal('addExpenseModal');
+      loadAllTransactions(); // Refresh the transactions list
+    }
+
+    // Function to load and display all sales and expenses
+    // You need to implement this in your app.js
+    function loadAllTransactions() {
+      loadAllSales();
+      loadAllExpenses();
+    }
+
+    function loadAllSales() {
+      // This should fetch sales from Firebase and display them
+      const salesContainer = document.getElementById('allSalesList');
+      
+      // Your code to fetch sales from Firebase
+      // Then create transaction cards like this:
+      /*
+      const saleCard = `
+        <div class="transaction-item sale">
+          <div class="transaction-type sale">Sale</div>
+          <div class="transaction-amount">₹${sale.amount}</div>
+          <div class="transaction-date">Date: ${sale.date}</div>
+          <div class="transaction-notes">${sale.notes || ''}</div>
+          <div class="transaction-actions">
+            <button onclick="deleteSale('${sale.id}')">Delete</button>
+          </div>
+        </div>
+      `;
+      */
+    }
+
+    function loadAllExpenses() {
+      // This should fetch expenses from Firebase and display them
+      const expensesContainer = document.getElementById('allExpensesList');
+      
+      // Your code to fetch expenses from Firebase
+      // Then create transaction cards like this:
+      /*
+      const expenseCard = `
+        <div class="transaction-item expense">
+          <div class="transaction-type expense">Expense</div>
+          <div class="transaction-amount">₹${expense.amount}</div>
+          <div class="transaction-date">Date: ${expense.date}</div>
+          <div class="transaction-notes">${expense.notes || ''}</div>
+          <div class="transaction-actions">
+            <button onclick="deleteExpense('${expense.id}')">Delete</button>
+          </div>
+        </div>
+      `;
+      */
     }
 
     // Close modals with Escape key
@@ -93,6 +164,11 @@
         closeModal('addSaleModal');
         closeModal('addExpenseModal');
       }
+    });
+
+    // Load transactions when page loads
+    window.addEventListener('load', function() {
+      loadAllTransactions();
     });
   </script>
 </body>
