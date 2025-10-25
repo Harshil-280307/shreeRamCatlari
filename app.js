@@ -1,9 +1,13 @@
+// ============================
 // Replace with your Google Apps Script Web App URL
-const API_URL = "https://script.google.com/macros/s/AKfycbxpBWcPSLj8EbkA38O8BV0AF8qcgo_nb1kyXkGC3QgxXNd9bf6qgyLU9iIGF-iZ4YVcIw/exec";
+// ============================
+const API_URL = "https://script.google.com/macros/s/AKfycbz_eBAgSIaypXbantqw1lWwZnZEzhgqqw2uIGMBoLrEjk26COXucQAhQBEMlPbIp53R/exec"; // <-- Replace this
 
 // ============================
-// Vepari Bills
+// Vepari Bills Functions
 // ============================
+
+// Add a new bill
 async function addBill() {
   const billData = {
     name: document.getElementById("billName").value,
@@ -34,6 +38,7 @@ async function addBill() {
   }
 }
 
+// Load all bills
 async function loadAllBills() {
   try {
     const res = await fetch(`${API_URL}?sheet=VepariBills`);
@@ -72,6 +77,7 @@ async function loadAllBills() {
   }
 }
 
+// Delete a bill
 async function deleteBill(id) {
   try {
     const res = await fetch(API_URL, {
@@ -93,8 +99,10 @@ async function deleteBill(id) {
 }
 
 // ============================
-// Daily Transactions
+// Daily Transactions Functions
 // ============================
+
+// Add a sale
 async function addSale() {
   const data = {
     type: "sale",
@@ -105,6 +113,7 @@ async function addSale() {
   await addTransaction("DailyTransactions", data);
 }
 
+// Add an expense
 async function addExpense() {
   const data = {
     type: "expense",
@@ -115,6 +124,7 @@ async function addExpense() {
   await addTransaction("DailyTransactions", data);
 }
 
+// Generic add transaction
 async function addTransaction(sheet, data) {
   try {
     const res = await fetch(API_URL, {
@@ -131,6 +141,7 @@ async function addTransaction(sheet, data) {
   }
 }
 
+// Load all transactions
 async function loadAllTransactions() {
   try {
     const res = await fetch(`${API_URL}?sheet=DailyTransactions`);
@@ -163,6 +174,7 @@ async function loadAllTransactions() {
   }
 }
 
+// Delete a transaction
 async function deleteTransaction(id) {
   try {
     const res = await fetch(API_URL, {
@@ -178,3 +190,11 @@ async function deleteTransaction(id) {
     alert("Failed to delete transaction.");
   }
 }
+
+// ============================
+// Initialize data on page load
+// ============================
+window.addEventListener("DOMContentLoaded", () => {
+  loadAllBills();
+  loadAllTransactions();
+});
