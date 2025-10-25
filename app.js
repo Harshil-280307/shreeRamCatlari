@@ -1,5 +1,5 @@
 // Replace with your Google Apps Script Web App URL
-const API_URL = "https://script.google.com/macros/s/AKfycbyYZm0bfL5ndn1uOeOASym3f6fbHVJdQshoCykDDWoLKaKa_boNBK06uj853JTqGHMsyg/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxpBWcPSLj8EbkA38O8BV0AF8qcgo_nb1kyXkGC3QgxXNd9bf6qgyLU9iIGF-iZ4YVcIw/exec";
 
 // ============================
 // Vepari Bills
